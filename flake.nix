@@ -19,9 +19,12 @@
           system = "x86_64-linux";
           modules = [
             ./.
+            ./con
           ];
           specialArgs = {
             inherit inputs;
+            username = "srv";
+            hostname = "arr-stack";
           };
         };
       };
