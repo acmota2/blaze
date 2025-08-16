@@ -1,11 +1,13 @@
 { pkgs, ... }:
 {
   imports = [
-    ./nvim
+    ./virtualization
+    ./boot
   ];
 
   environment.systemPackages = with pkgs; [
     coreutils-full
+    neovim
     curl
     file
     git
