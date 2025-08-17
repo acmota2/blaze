@@ -7,10 +7,10 @@
         volumes = [ "/srv/radarr:/config" ];
         ports = [ "7878:7878" ];
         environment = {
-	  TZ = "Europe/Lisbon";
+          TZ = "Europe/Lisbon";
           PUID = "1000";
           PGID = "1000";
-	};
+        };
         image = "lscr.io/linuxserver/radarr:latest";
         extraOptions = [
           "--network=host"
@@ -45,7 +45,7 @@
         volumes = [
           "/srv/bazarr:/config"
         ];
-        ports = [ "7878:7878" ];
+        ports = [ "6767:6767" ];
         extraOptions = [
           "--network=host"
         ];
@@ -74,14 +74,14 @@
         environment = {
           LOG_LEVEL = "error";
           TZ = "Europe/Lisbon";
-          ports = [ "5055:5055" ];
-          volumes = [
-            "/srv/jellyseerr:/app/config"
-          ];
-          extraOptions = [
-            "--network=host"
-          ];
         };
+        ports = [ "5055:5055" ];
+        volumes = [
+          "/srv/jellyseerr:/app/config"
+        ];
+        extraOptions = [
+          "--network=host"
+        ];
       };
 
       deluge = {
@@ -128,5 +128,8 @@
     8112
     8989
     7878
+    9696
+    5055
+    6767
   ];
 }
