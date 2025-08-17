@@ -5,9 +5,13 @@
       radarr = {
         autoStart = true;
         volumes = [ "/srv/radarr:/config" ];
-        environment.TZ = "Europe/Lisbon";
-        image = "lscr.io/linuxserver/radarr:latest";
         ports = [ "7878:7878" ];
+        environment = {
+	  TZ = "Europe/Lisbon";
+          PUID = "1000";
+          PGID = "1000";
+	};
+        image = "lscr.io/linuxserver/radarr:latest";
         extraOptions = [
           "--network=host"
         ];
@@ -16,6 +20,7 @@
       sonarr = {
         autoStart = true;
         image = "lscr.io/linuxserver/sonarr:latest";
+        ports = [ "8989:8989" ];
         environment = {
           PUID = "1000";
           PGID = "1000";
@@ -24,7 +29,6 @@
         volumes = [
           "/srv/sonarr:/config"
         ];
-        ports = [ "8989:8989" ];
         extraOptions = [
           "--network=host"
         ];
