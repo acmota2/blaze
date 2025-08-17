@@ -35,7 +35,7 @@
         image = "lscr.io/linuxserver/deluge:latest";
         volumes = [
           "/srv/deluge:/config"
-          "/media/downloads:/downloads"
+          "/mnt/media/downloads:/downloads"
         ];
         ports = [
           "8112:8112"
@@ -57,8 +57,9 @@
           "/srv/Jellyfin:/config"
           "/srv/Jellyfin:/cache"
           "/srv/Jellyfin:/log"
-          "/media/Movies:/data/movies"
-          "/media/TV-Series:/data/tvshows"
+          "/mnt/media/movies:/data/movies"
+          "/mnt/media/movies_pt:/data/movies_pt"
+          "/mnt/media/tv_shows:/data/tv_shows"
         ];
         ports = [ "8096:8096" ];
         environment = {
