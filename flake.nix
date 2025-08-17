@@ -20,6 +20,7 @@
           modules = [
             ./.
             ./con
+            ./arr-stack
           ];
           specialArgs = {
             inherit inputs;
