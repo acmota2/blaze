@@ -4,12 +4,16 @@
     containers = {
       radarr = {
         autoStart = true;
-        volumes = [ "/srv/radarr:/config" ];
+        volumes = [
+          "/srv/radarr:/config"
+          "/mnt/media/downloads:/data/downloads"
+          "/mnt/media/movies:/data/movies"
+        ];
         ports = [ "7878:7878" ];
         environment = {
-          TZ = "Europe/Lisbon";
-          PUID = "1000";
           PGID = "1000";
+          PUID = "1000";
+          TZ = "Europe/Lisbon";
         };
         image = "lscr.io/linuxserver/radarr:latest";
         extraOptions = [
@@ -28,6 +32,8 @@
         };
         volumes = [
           "/srv/sonarr:/config"
+          "/mnt/media/downloads:/data/downloads"
+          "/mnt/media/tv_shows:/data/tv_shows"
         ];
         extraOptions = [
           "--network=host"
@@ -44,6 +50,9 @@
         };
         volumes = [
           "/srv/bazarr:/config"
+          "/mnt/media/downloads:/data/downloads"
+          "/mnt/media/tv_shows:/data/tv_shows"
+          "/mnt/media/movies:/data/movies"
         ];
         ports = [ "6767:6767" ];
         extraOptions = [
@@ -62,6 +71,7 @@
         ports = [ "9696:9696" ];
         volumes = [
           "/srv/prowlarr:/config"
+          "/mnt/media/downloads:/data/downloads"
         ];
         extraOptions = [
           "--network=host"
@@ -78,6 +88,7 @@
         ports = [ "5055:5055" ];
         volumes = [
           "/srv/jellyseerr:/app/config"
+          "/mnt/media/downloads:/data/downloads"
         ];
         extraOptions = [
           "--network=host"
@@ -89,12 +100,13 @@
         image = "lscr.io/linuxserver/deluge:latest";
         volumes = [
           "/srv/deluge:/config"
-          "/mnt/media/downloads:/downloads"
+          "/mnt/media/downloads:/data/downloads"
         ];
         ports = [
           "8112:8112"
           "6881:6881"
           "6881:6881/udp"
+	  "58846:58846"
         ];
         environment = {
           PUID = "1000";
@@ -124,12 +136,13 @@
   };
 
   networking.firewall.allowedTCPPorts = [
+    5055
+    6767
+    7878
     8096
     8112
     8989
-    7878
     9696
-    5055
-    6767
+    58846
   ];
 }
