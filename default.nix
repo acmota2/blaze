@@ -4,6 +4,7 @@
     ./virtualization
     ./boot
     ./machine
+    ./localization
   ];
 
   environment.systemPackages = with pkgs; [
