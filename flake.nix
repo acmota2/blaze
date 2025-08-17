@@ -19,8 +19,9 @@
           system = "x86_64-linux";
           modules = [
             ./.
-            ./con
             ./arr-stack
+            ./con
+	    ./nfs.nix
           ];
           specialArgs = {
             inherit inputs;
