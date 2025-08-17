@@ -3,6 +3,7 @@
   imports = [
     ./virtualization
     ./boot
+    ./machine
   ];
 
   environment.systemPackages = with pkgs; [
