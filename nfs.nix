@@ -3,26 +3,13 @@
   fileSystems."/mnt/media" = {
     device = "nfs.voldemota.xyz:/jellyfin";
     fsType = "nfs";
+    options = [
+      "nfsvers=4.2"
+      "sync"
+      "x-systemd.idle-timeout=600"
+      "x-systemd.automount"
+    ];
   };
-  systemd.mounts = [
-    {
-      type = "nfs";
-      mountConfig = {
-        Options = "noatime";
-      };
-      what = "nfs.voldemota.xyz:/jellyfin";
-      where = "/mnt/media";
-    }
-  ];
-  systemd.automounts = [
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/media";
-    }
-  ];
 
   # optional, but ensures rpc-statsd is running for on demand mounting
   boot.supportedFilesystems = [ "nfs" ];
