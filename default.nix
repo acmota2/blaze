@@ -5,6 +5,7 @@
     ./boot
     ./machine
     ./localization
+./user.nix
   ];
 
   environment.systemPackages = with pkgs; [
