@@ -23,7 +23,7 @@
           ];
           specialArgs = {
             inherit inputs;
-            username = "srv";
+            username = "acmota2";
             hostname = "arr-stack";
           };
         };
