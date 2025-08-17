@@ -5,8 +5,7 @@
       radarr = {
         autoStart = true;
         volumes = [ "/srv/radarr:/config" ];
-        restart = "unless-stopped";
-        environment.TZ = "Europe/Berlin";
+        environment.TZ = "Europe/Lisbon";
         image = "lscr.io/linuxserver/radarr:latest";
         ports = [ "7878:7878" ];
         extraOptions = [
@@ -15,12 +14,12 @@
       };
 
       sonarr = {
+        autoStart = true;
         image = "lscr.io/linuxserver/sonarr:latest";
-        restart = "unless-stopped";
         environment = {
           PUID = "1000";
           PGID = "1000";
-          TZ = "Europe/Berlin";
+          TZ = "Europe/Lisbon";
         };
         volumes = [
           "/srv/sonarr:/config"
@@ -34,9 +33,8 @@
       deluge = {
         autoStart = true;
         image = "lscr.io/linuxserver/deluge:latest";
-        restart = "unless-stopped";
         volumes = [
-          "/srv/deluge/config:/config"
+          "/srv/deluge:/config"
           "/media/downloads:/downloads"
         ];
         ports = [
@@ -47,7 +45,7 @@
         environment = {
           PUID = "1000";
           PGID = "1000";
-          TZ = "Europe/Berlin";
+          TZ = "Europe/Lisbon";
           DELUGE_LOGLEVEL = "error";
         };
       };
@@ -55,11 +53,10 @@
       jellyfin = {
         autoStart = true;
         image = "docker.io/jellyfin/jellyfin:latest";
-        restart = "unless-stopped";
         volumes = [
-          "/srv/Jellyfin/config:/config"
-          "/srv/Jellyfin/cache:/cache"
-          "/srv/Jellyfin/log:/log"
+          "/srv/Jellyfin:/config"
+          "/srv/Jellyfin:/cache"
+          "/srv/Jellyfin:/log"
           "/media/Movies:/data/movies"
           "/media/TV-Series:/data/tvshows"
         ];
