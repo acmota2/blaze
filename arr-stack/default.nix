@@ -30,6 +30,56 @@
         ];
       };
 
+      bazarr = {
+        autoStart = true;
+        image = "lscr.io/linuxserver/bazarr:latest";
+        environment = {
+          PUID = "1000";
+          PGID = "1000";
+          TZ = "Europe/Lisbon";
+        };
+        volumes = [
+          "/srv/bazarr:/config"
+        ];
+        ports = [ "7878:7878" ];
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+
+      prowlarr = {
+        autoStart = true;
+        image = "lscr.io/linuxserver/prowlarr:latest";
+        environment = {
+          PUID = "1000";
+          PGID = "1000";
+          TZ = "Europe/Lisbon";
+        };
+        ports = [ "9696:9696" ];
+        volumes = [
+          "/srv/prowlarr:/config"
+        ];
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+
+      jellyseerr = {
+        autoStart = true;
+        image = "fallenbagel/jellyseerr:latest";
+        environment = {
+          LOG_LEVEL = "error";
+          TZ = "Europe/Lisbon";
+          ports = [ "5055:5055" ];
+          volumes = [
+            "/srv/jellyseerr:/app/config"
+          ];
+          extraOptions = [
+            "--network=host"
+          ];
+        };
+      };
+
       deluge = {
         autoStart = true;
         image = "lscr.io/linuxserver/deluge:latest";
@@ -69,5 +119,10 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 8096 8112 8989 7878 ];
+  networking.firewall.allowedTCPPorts = [
+    8096
+    8112
+    8989
+    7878
+  ];
 }
