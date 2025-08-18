@@ -100,7 +100,7 @@
         image = "lscr.io/linuxserver/deluge:latest";
         volumes = [
           "/srv/deluge:/config"
-          "/mnt/media/downloads:/data/downloads"
+          "/mnt/media/downloads:/downloads"
         ];
         ports = [
           "8112:8112"
