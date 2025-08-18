@@ -20,8 +20,9 @@
           modules = [
             ./.
             ./arr-stack
+            ./audiobooks
             ./con
-	    ./nfs.nix
+            ./nfs.nix
           ];
           specialArgs = {
             inherit inputs;
