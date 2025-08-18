@@ -1,5 +1,5 @@
 {
-  virtualization.oci.containers = {
+  virtualisation.oci-containers.containers = {
     lazy-librarian = {
       image = "lscr.io/linuxserver/lazylibrarian:latest";
       environment = {
