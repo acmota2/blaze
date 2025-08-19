@@ -11,7 +11,8 @@
       volumes = [
         "/srv/lazy-librarian:/config"
         "/mnt/media/downloads:/downloads"
-        "/mnt/audiobooks/audiobooks:/books"
+        "/mnt/audiobooks/audiobooks:/audiobooks"
+        "/mnt/audiobooks/books:/books"
       ];
       ports = [ "5299:5299" ];
     };
@@ -28,6 +29,7 @@
         "/srv/audiobookshelf/metadata:/metadata"
         "/mnt/audiobooks/podcasts:/podcasts"
         "/mnt/audiobooks/books:/books"
+        "/mnt/audiobooks/audiobooks:/audiobooks"
       ];
       ports = [ "13378:80" ];
     };
