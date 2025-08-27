@@ -129,6 +129,9 @@
         ];
         ports = [ "8096:8096" ];
         environment = {
+          PUID = "1000";
+          PGID = "1000";
+          TZ = "Europe/Lisbon";
           JELLYFIN_LOG_DIR = "/log";
         };
       };
