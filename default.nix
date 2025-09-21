@@ -1,11 +1,12 @@
 { pkgs, ... }:
 {
   imports = [
-    ./virtualization
     ./boot
-    ./machine
     ./localization
-./user.nix
+    ./machine
+    ./nfs.nix
+    ./user.nix
+    ./virtualization
   ];
 
   environment.systemPackages = with pkgs; [

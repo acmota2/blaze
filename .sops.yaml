@@ -1,6 +1,6 @@
 keys:
   - &Allay age184ftm4s9hy99yl9l9hvy0a2y2qa8c6hkq9velwclsjggsfdh033qjv2606
-  - &arr-stack ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOH9nf+JzCjB/umoMcK8wmx+yqRrsAyqwos+HHShbN/O acmota2@nixos
+  - &arr-stack age16fd5cwgg9mez9skfw743rf74pejng7vfhsceg4etg7uqap6d9dzq9y9cfl
 creation_rules:
   - path_regex: (immich|arr-stack)/[^/]+\.(yaml|json|ini|env)$
     key_groups:

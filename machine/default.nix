@@ -1,6 +1,7 @@
+{ hostname, ... }:
 {
   imports = [
-    ./hardware-configuration.nix
+    ./${hostname}.nix
   ];
   system.stateVersion = "25.05";
 }
