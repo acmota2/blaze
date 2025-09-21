@@ -45,7 +45,10 @@
         };
 
         images-stack = {
-          modules = [ ./immich ] ++ defaultModules;
+          modules = [
+            ./immich
+          ]
+          ++ defaultModules;
         };
       };
     in
