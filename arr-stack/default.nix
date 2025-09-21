@@ -1,6 +1,5 @@
 {
   virtualisation.oci-containers = {
-    backend = "podman";
     containers = {
       radarr = {
         autoStart = true;
@@ -106,7 +105,7 @@
           "8112:8112"
           "6881:6881"
           "6881:6881/udp"
-	  "58846:58846"
+          "58846:58846"
         ];
         environment = {
           PUID = "1000";
