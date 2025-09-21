@@ -7,6 +7,10 @@
         content = {
           type = "gpt";
           partitions = {
+            BIOS = {
+              type = "EF02";
+              size = "2M";
+            };
             ESP = {
               type = "EF00";
               size = "500M";
@@ -14,14 +18,17 @@
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-                mountOptions = [ "umask=0077" ];
+                mountOptions = [
+                  "fmask=0022"
+                  "dmask=0022"
+                ];
               };
             };
             root = {
               size = "100%";
               content = {
                 type = "filesystem";
-                format = "btrfs";
+                format = "ext4";
                 mountpoint = "/";
               };
             };
