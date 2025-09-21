@@ -3,8 +3,12 @@
   imports = [ sops-nix.nixosModules.sops ];
 
   sops = {
-    defaultSopsFile = ../secrets/secrets.yaml;
     defaultSopsFormat = "yaml";
     age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+    secrets.immich-settings = {
+      format = "dotenv";
+      owner = "${username}";
+      sopsFile = ../immich/immich.env;
+    };
   };
 }

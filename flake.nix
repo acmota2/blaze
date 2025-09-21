@@ -12,22 +12,22 @@
   };
 
   outputs =
-    { nixpkgs, ... }@inputs:
+    { nixpkgs, sops-nix, ... }@inputs:
     let
       username = "acmota2";
 
       defaultModules = [
         ./.
         ./con
-        ./nfs.nix
         ./sops
-        ./user.nix
+        sops-nix.nixosModules.sops
       ];
 
       defaultSpecialArgs = {
-        inherit inputs username;
+        inherit username;
       };
 
+      system = "x86_64-linux";
       systemConfigs = {
         arr-stack = {
           modules = [
@@ -38,11 +38,9 @@
         };
 
         images-stack = {
-          modules = [ ./immich ];
-        }
-        ++ defaultModules;
+          modules = [ ./immich ] ++ defaultModules;
+        };
       };
-      system = "x86_64-linux";
     in
     {
       nixosConfigurations = nixpkgs.lib.mapAttrs (
@@ -50,10 +48,12 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           modules = config.modules;
-          specialArgs = {
-            inherit hostname;
-          }
-          // defaultSpecialArgs;
+          specialArgs =
+            inputs
+            // defaultSpecialArgs
+            // {
+              inherit hostname;
+            };
         }
       ) systemConfigs;
     };

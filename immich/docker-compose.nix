@@ -14,8 +14,6 @@
     format = "dotenv";
     owner = "${username}";
     group = "root";
-    # Restart the container service if the secret changes
-    restartTriggers = [ "oci-immich_machine_learning.service" ];
   };
 
   # Runtime

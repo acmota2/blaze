@@ -1,0 +1,4 @@
+{ ... }:
+{
+  imports = [ ./docker-compose.nix ];
+}
