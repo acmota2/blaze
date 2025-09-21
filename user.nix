@@ -7,6 +7,6 @@
       "wheel"
       "networkmanager"
     ];
-    description = "acmota2";
+    description = "A normal user";
   };
 }
