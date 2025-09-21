@@ -3,7 +3,7 @@ keys:
   - &arr-stack age16fd5cwgg9mez9skfw743rf74pejng7vfhsceg4etg7uqap6d9dzq9y9cfl
   - &images-stack age155pkmdvkywp74dxgsleyf88zzugnlx63p3qnlq3j0e3ns83a2sgs50nzm9
 creation_rules:
-  - path_regex: (immich|secrets|arr-stack)/[^/]+\.(yaml|json|ini|env)$
+  - path_regex: (immich|secrets|arr-stack)\/[^/]+\.(yaml|json|ini|env)$
     key_groups:
       - age:
           - *Allay
