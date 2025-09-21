@@ -25,6 +25,7 @@
       defaultModules = [
         ./.
         ./con
+        ./disko
         ./sops
         sops-nix.nixosModules.sops
         disko.nixosModules.disko
