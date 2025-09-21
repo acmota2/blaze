@@ -3,19 +3,10 @@
   config,
   lib,
   pkgs,
-  username,
   ...
 }:
 
 {
-  # Secrets
-  sops.secrets."immich-env" = {
-    sopsFile = ./immich.env;
-    format = "dotenv";
-    owner = "${username}";
-    group = "root";
-  };
-
   # Runtime
   virtualisation.podman = {
     enable = true;
@@ -38,7 +29,7 @@
   virtualisation.oci-containers.containers."immich_machine_learning" = {
     image = "ghcr.io/immich-app/immich-machine-learning:release";
     environmentFiles = [
-      config.sops.secrets."immich-env".path
+      config.sops.secrets."immich-settings".path
     ];
     volumes = [
       "immich_model-cache:/cache:rw"
@@ -71,7 +62,7 @@
   virtualisation.oci-containers.containers."immich_postgres" = {
     image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:8d292bdb796aa58bbbaa47fe971c8516f6f57d6a47e7172e62754feb6ed4e7b0";
     environmentFiles = [
-      config.sops.secrets."immich-env".path
+      config.sops.secrets."immich-settings".path
     ];
     volumes = [
       "/srv/postgres/data:/var/lib/postgresql/data:rw"
@@ -129,7 +120,7 @@
   virtualisation.oci-containers.containers."immich_server" = {
     image = "ghcr.io/immich-app/immich-server:release";
     environmentFiles = [
-      config.sops.secrets."immich-env".path
+      config.sops.secrets."immich-settings".path
     ];
     volumes = [
       "/etc/localtime:/etc/localtime:ro"
