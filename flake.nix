@@ -43,13 +43,29 @@
             ./audiobooks
           ]
           ++ defaultModules;
+          specialArgs = defaultSpecialArgs;
         };
-
         images-stack = {
           modules = [
             ./immich
           ]
           ++ defaultModules;
+          specialArgs = defaultSpecialArgs;
+        };
+        k3s-control = {
+          modules = [
+            { system.stateVersion = "25.05"; }
+            ./boot
+            ./disko
+            ./k3s/control-plane.nix
+            ./machine
+            ./sops
+            disko.nixosModules.disko
+            sops-nix.nixosModules.sops
+          ];
+          specialArgs = {
+            username = "root";
+          };
         };
       };
     in
@@ -61,7 +77,7 @@
           modules = config.modules;
           specialArgs =
             inputs
-            // defaultSpecialArgs
+            // config.specialArgs
             // {
               inherit hostname;
             };
