@@ -7,6 +7,6 @@
 
   environment.systemPackages = with pkgs; [
     kubectl
-    helm
+    kubernetes-helm
   ];
 }

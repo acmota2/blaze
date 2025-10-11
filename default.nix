@@ -1,13 +1,18 @@
-{ pkgs, ... }:
+{ pkgs, disko, sops-nix, ... }:
 {
-  imports = [
-    ./boot
-    ./localization
-    ./machine
-    ./nfs.nix
-    ./user.nix
-    ./virtualization
-  ];
+      defaultModules = [
+        ./boot
+        ./con
+        ./disko
+        ./localization
+        ./machine
+        ./sops
+        disko.nixosModules.disko
+        sops-nix.nixosModules.sops
+      ];
+  ./nfs.nix
+  ./user.nix
+  ./virtualization
 
   environment.systemPackages = with pkgs; [
     coreutils-full
