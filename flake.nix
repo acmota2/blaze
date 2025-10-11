@@ -2,6 +2,7 @@
   description = "My NixOS server configuration";
 
   inputs = {
+    colmena.url = "github:zhaofengli/colmena";
     disko.url = "github:nix-community/disko";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixvim = {
@@ -14,6 +15,7 @@
 
   outputs =
     {
+      colmena,
       disko,
       nixpkgs,
       sops-nix,
@@ -44,6 +46,8 @@
           ]
           ++ defaultModules;
           specialArgs = defaultSpecialArgs;
+          targetHost = "arr.voldemota.xyz";
+          targetUser = username;
         };
         images-stack = {
           modules = [
@@ -51,11 +55,14 @@
           ]
           ++ defaultModules;
           specialArgs = defaultSpecialArgs;
+          targetHost = "192.168.1.10";
+          targetUser = username;
         };
         k3s-control = {
           modules = [
             { system.stateVersion = "25.05"; }
             ./boot
+            ./con
             ./disko
             ./k3s/control-plane.nix
             ./machine
@@ -63,6 +70,8 @@
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
           ];
+          targetHost = "192.168.1.11";
+          targetUser = "root";
           specialArgs = {
             username = "root";
           };
@@ -70,17 +79,29 @@
       };
     in
     {
+      colmenaHive =
+        colmena.lib.makeHive {
+          meta = {
+            nixpkgs = import nixpkgs {
+              inherit system;
+              overlays = [ ];
+            };
+          };
+        }
+        // nixpkgs.lib.mapAttrs (hostname: config: {
+          imports = config.modules;
+          specialArgs = inputs // config.specialArgs // { inherit hostname; };
+          deployment = {
+            inherit (config) targetHost targetUser;
+          };
+        }) systemConfigs;
+
       nixosConfigurations = nixpkgs.lib.mapAttrs (
         hostname: config:
         nixpkgs.lib.nixosSystem {
           inherit system;
           modules = config.modules;
-          specialArgs =
-            inputs
-            // config.specialArgs
-            // {
-              inherit hostname;
-            };
+          specialArgs = inputs // config.specialArgs // { inherit hostname; };
         }
       ) systemConfigs;
     };
