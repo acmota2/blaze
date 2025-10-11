@@ -1,4 +1,5 @@
-{ sops-nix, username, ... }:
+{ username, ... }:
+{ sops-nix, ... }:
 {
   imports = [ sops-nix.nixosModules.sops ];
 

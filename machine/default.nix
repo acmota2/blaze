@@ -1,5 +1,5 @@
 { hostname, ... }:
-{
+_: {
   imports = [
     ./${hostname}.nix
   ];

@@ -20,10 +20,8 @@
   outputs =
     {
       colmena,
-      disko,
       nixos-anywhere,
       nixpkgs,
-      sops-nix,
       ...
     }@inputs:
     let
@@ -35,39 +33,31 @@
         ./virtualization
       ];
 
-      defaultSpecialArgs = {
-        inherit username;
-      };
-
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      systemConfigs = {
+
+      baseSystemConfigs = {
         arr-stack = {
-          modules = [
-            ./.
+          specificModules = [
             ./arr-stack
             ./audiobooks
           ]
           ++ podmanMachineModules;
-          specialArgs = defaultSpecialArgs;
           tags = [ "podman" ];
           targetHost = "arr.voldemota.xyz";
           targetUser = username;
         };
         images-stack = {
-          modules = [
-            ./.
+          specificModules = [
             ./immich
           ]
           ++ podmanMachineModules;
-          specialArgs = defaultSpecialArgs;
           tags = [ "podman" ];
           targetHost = "192.168.1.10";
           targetUser = username;
         };
         k3s-control = {
-          modules = [
-            ./.
+          specificModules = [
             ./k3s/control-plane.nix
           ];
           specialArgs = {
@@ -78,6 +68,46 @@
           targetUser = "root";
         };
       };
+
+      lib = nixpkgs.lib;
+
+      systemConfigs = nixpkgs.lib.mapAttrs (
+        hostname: config:
+        let
+          username = config.targetUser;
+          resolvedMod =
+            path: args:
+            let
+              resolvedPath = if lib.filesystem.isDir path then path + "default.nix" else path;
+              importedModule = import resolvedPath;
+              needsCapture =
+                lib.isFunction importedModule
+                && (lib.any (arg: lib.hasAttr arg (lib.functionArgs importedModule)) [
+                  "username"
+                  "hostname"
+                ]);
+            in
+            if needsCapture then (importedModule args) else importedModule;
+        in
+        {
+          inherit (config)
+            targetUser
+            targetHost
+            tags
+            ;
+          imports = lib.map (
+            (
+              mod:
+              resolvedMod mod {
+                inherit username hostname;
+              }
+            )
+              (config.specificModules ++ [ ./. ])
+          );
+          targetPort = 22;
+          specialArgs = inputs;
+        }
+      ) baseSystemConfigs;
     in
     {
       colmenaHive = colmena.lib.makeHive (
@@ -88,14 +118,7 @@
             };
           };
         }
-        // nixpkgs.lib.mapAttrs (hostname: config: {
-          imports = config.modules;
-          specialArgs = inputs // config.specialArgs // { inherit hostname; };
-          deployment = {
-            inherit (config) targetHost targetUser tags;
-            targetPort = 22;
-          };
-        }) systemConfigs
+        // systemConfigs
       );
 
       devShells.${system}.default = pkgs.mkShell {
@@ -105,13 +128,16 @@
         ];
       };
 
-      nixosConfigurations = nixpkgs.lib.mapAttrs (
+      nixosConfigurations = lib.mapAttrs (
         hostname: config:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = config.modules;
-          specialArgs = inputs // config.specialArgs // { inherit hostname; };
+          modules = config.specificModules ++ [ ./. ];
+          specialArgs = inputs // {
+            inherit hostname;
+            username = config.targetUser;
+          };
         }
-      ) systemConfigs;
+      ) baseSystemConfigs;
     };
 }

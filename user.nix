@@ -1,4 +1,5 @@
-{ pkgs, username, ... }:
+{ username, ... }:
+{ pkgs, ... }:
 {
   users.users."${username}" = {
     shell = pkgs.bash;
