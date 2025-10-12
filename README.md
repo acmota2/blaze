@@ -1,4 +1,4 @@
-# nix-server 
+# Blaze
 
 This repository contains the NixOS configurations for my homelab servers. The entire setup is managed using Nix Flakes to ensure it is reproducible, declarative, and version-controlled.
 
