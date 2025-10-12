@@ -1,13 +1,17 @@
 { username, ... }:
 { pkgs, ... }:
 {
-  users.users."${username}" = {
-    shell = pkgs.bash;
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
-    description = "A normal user";
+  users = {
+    groups.${username} = { };
+    users."${username}" = {
+      shell = pkgs.bash;
+      isNormalUser = true;
+      group = "${username}";
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+      ];
+      description = "A normal user";
+    };
   };
 }

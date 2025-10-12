@@ -1,17 +1,17 @@
 {
-  pkgs,
   disko,
+  pkgs,
   sops-nix,
   ...
 }:
 {
-  defaultModules = [
-    ./boot
-    ./con
-    ./disko
-    ./localization
-    ./machine
-    ./sops
+  imports = [
+    { system.stateVersion = "25.05"; }
+    ./boot/default.nix
+    ./con/default.nix
+    ./disko/default.nix
+    ./localization/default.nix
+    ./sops/default.nix
     disko.nixosModules.disko
     sops-nix.nixosModules.sops
   ];

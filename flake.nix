@@ -25,6 +25,9 @@
       ...
     }@inputs:
     let
+      defaultMeta = {
+        keyFilePath = "/home/${username}/.config/sops/age/keys.txt";
+      };
       username = "acmota2";
 
       podmanMachineModules = [
@@ -36,29 +39,34 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
-      baseSystemConfigs = {
+      systemConfigs = {
         arr-stack = {
           specificModules = [
             ./arr-stack
             ./audiobooks
+            ./machine/arr-stack.nix
           ]
           ++ podmanMachineModules;
           tags = [ "podman" ];
           targetHost = "arr.voldemota.xyz";
           targetUser = username;
+          specialArgs = defaultMeta;
         };
         images-stack = {
           specificModules = [
             ./immich
+            ./machine/images-stack.nix
           ]
           ++ podmanMachineModules;
           tags = [ "podman" ];
           targetHost = "192.168.1.10";
           targetUser = username;
+          specialArgs = defaultMeta;
         };
         k3s-control = {
           specificModules = [
             ./k3s/control-plane.nix
+            ./machine/k3s-control.nix
           ];
           specialArgs = {
             username = "root";
@@ -66,48 +74,14 @@
           tags = [ "k8s" ];
           targetHost = "192.168.1.11";
           targetUser = "root";
+          specialArgs = {
+            keyFilePath = "/root/keys.txt";
+          };
         };
       };
 
+      mkSystem = format: lib.mapAttrs format systemConfigs;
       lib = nixpkgs.lib;
-
-      systemConfigs = nixpkgs.lib.mapAttrs (
-        hostname: config:
-        let
-          username = config.targetUser;
-          resolvedMod =
-            path: args:
-            let
-              resolvedPath = if lib.filesystem.isDir path then path + "default.nix" else path;
-              importedModule = import resolvedPath;
-              needsCapture =
-                lib.isFunction importedModule
-                && (lib.any (arg: lib.hasAttr arg (lib.functionArgs importedModule)) [
-                  "username"
-                  "hostname"
-                ]);
-            in
-            if needsCapture then (importedModule args) else importedModule;
-        in
-        {
-          inherit (config)
-            targetUser
-            targetHost
-            tags
-            ;
-          imports = lib.map (
-            (
-              mod:
-              resolvedMod mod {
-                inherit username hostname;
-              }
-            )
-              (config.specificModules ++ [ ./. ])
-          );
-          targetPort = 22;
-          specialArgs = inputs;
-        }
-      ) baseSystemConfigs;
     in
     {
       colmenaHive = colmena.lib.makeHive (
@@ -116,9 +90,29 @@
             nixpkgs = import nixpkgs {
               inherit system;
             };
+            specialArgs = inputs;
+            nodeSpecialArgs = mkSystem (
+              hostname: config:
+              {
+                inherit hostname;
+                username = config.targetUser;
+              }
+              // config.specialArgs
+            );
           };
         }
-        // systemConfigs
+        // mkSystem (
+          hostname: config: {
+            imports = config.specificModules ++ [ ./. ];
+            deployment = {
+              inherit (config)
+                tags
+                targetUser
+                targetHost
+                ;
+            };
+          }
+        )
       );
 
       devShells.${system}.default = pkgs.mkShell {
@@ -128,16 +122,16 @@
         ];
       };
 
-      nixosConfigurations = lib.mapAttrs (
+      nixosConfigurations = mkSystem (
         hostname: config:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = config.specificModules ++ [ ./. ];
-          specialArgs = inputs // {
+          modules = config.imports ++ [ ./. ];
+          specialArgs = {
             inherit hostname;
             username = config.targetUser;
           };
         }
-      ) baseSystemConfigs;
+      );
     };
 }
