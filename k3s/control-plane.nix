@@ -9,4 +9,9 @@
     kubectl
     kubernetes-helm
   ];
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 6443 ];
+  };
 }
