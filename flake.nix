@@ -65,6 +65,7 @@
         };
         k3s-control = {
           specificModules = [
+            ./iscsi
             ./k3s/control-plane.nix
             ./machine/k3s-control.nix
           ];
@@ -117,6 +118,7 @@
 
       devShells.${system}.default = pkgs.mkShell {
         packages = [
+          pkgs.sops
           colmena.packages.${system}.colmena
           nixos-anywhere.packages.${system}.default
         ];
