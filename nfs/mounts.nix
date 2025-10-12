@@ -1,5 +1,4 @@
 {
-  services.rpcbind.enable = true; # needed for NFS
   fileSystems."/mnt/media" = {
     device = "nfs.voldemota.xyz:/jellyfin";
     fsType = "nfs";
@@ -21,7 +20,4 @@
       "x-systemd.automount"
     ];
   };
-
-  # optional, but ensures rpc-statsd is running for on demand mounting
-  boot.supportedFilesystems = [ "nfs" ];
 }

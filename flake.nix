@@ -31,7 +31,7 @@
       username = "acmota2";
 
       podmanMachineModules = [
-        ./nfs.nix
+        ./nfs/mounts.nix
         ./user.nix
         ./virtualization
       ];

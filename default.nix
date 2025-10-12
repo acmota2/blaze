@@ -11,6 +11,7 @@
     ./con/default.nix
     ./disko/default.nix
     ./localization/default.nix
+    ./nfs/default.nix
     ./sops/default.nix
     disko.nixosModules.disko
     sops-nix.nixosModules.sops
