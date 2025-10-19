@@ -1,4 +1,6 @@
-_: {
+{ disko, ... }:
+{
+  imports = [ disko.nixosModules.disko ];
   disko.devices = {
     disk = {
       vm-disk = {

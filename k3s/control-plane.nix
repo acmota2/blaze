@@ -3,6 +3,11 @@
   services.k3s = {
     role = "server";
     enable = true;
+    extraFlags = toString [
+      "--disable traefik"
+      "--disable servicelb"
+      "--disable local-storage"
+    ];
   };
 
   environment.systemPackages = with pkgs; [

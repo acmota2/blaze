@@ -128,11 +128,12 @@
         hostname: config:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = config.imports ++ [ ./. ];
+          modules = config.specificModules ++ [ ./. ];
           specialArgs = {
             inherit hostname;
             username = config.targetUser;
-          };
+          }
+          // inputs;
         }
       );
     };

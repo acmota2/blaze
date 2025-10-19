@@ -1,9 +1,4 @@
-{
-  disko,
-  pkgs,
-  sops-nix,
-  ...
-}:
+{ pkgs, ... }:
 {
   imports = [
     { system.stateVersion = "25.05"; }
@@ -13,8 +8,6 @@
     ./localization/default.nix
     ./nfs/default.nix
     ./sops/default.nix
-    disko.nixosModules.disko
-    sops-nix.nixosModules.sops
   ];
 
   environment.systemPackages = with pkgs; [
