@@ -68,6 +68,7 @@
             ./iscsi
             ./k3s/control-plane.nix
             ./machine/k3s-control.nix
+            ./nfs/default.nix
           ];
           specialArgs = {
             username = "root";
