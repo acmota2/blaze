@@ -4,6 +4,7 @@
     role = "server";
     enable = true;
     extraFlags = toString [
+      "--bind-address 0.0.0.0"
       "--disable traefik"
       "--disable servicelb"
       "--disable local-storage"

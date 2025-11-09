@@ -25,44 +25,10 @@
       ...
     }@inputs:
     let
-      defaultMeta = {
-        keyFilePath = "/home/${username}/.config/sops/age/keys.txt";
-      };
-      username = "acmota2";
-
-      podmanMachineModules = [
-        ./nfs/mounts.nix
-        ./user.nix
-        ./virtualization
-      ];
-
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
       systemConfigs = {
-        arr-stack = {
-          specificModules = [
-            ./arr-stack
-            ./audiobooks
-            ./machine/arr-stack.nix
-          ]
-          ++ podmanMachineModules;
-          tags = [ "podman" ];
-          targetHost = "arr.voldemota.xyz";
-          targetUser = username;
-          specialArgs = defaultMeta;
-        };
-        images-stack = {
-          specificModules = [
-            ./immich
-            ./machine/images-stack.nix
-          ]
-          ++ podmanMachineModules;
-          tags = [ "podman" ];
-          targetHost = "192.168.1.10";
-          targetUser = username;
-          specialArgs = defaultMeta;
-        };
         k3s-control = {
           specificModules = [
             ./iscsi
@@ -74,7 +40,7 @@
             username = "root";
           };
           tags = [ "k8s" ];
-          targetHost = "192.168.1.11";
+          targetHost = "k3s-control.voldemota.xyz";
           targetUser = "root";
           specialArgs = {
             keyFilePath = "/root/keys.txt";
