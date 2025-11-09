@@ -4,15 +4,11 @@ This repository contains the NixOS configurations for my homelab servers. The en
 
 This repository currently manages the following machines:
 
-* **`immich-server`**: A dedicated server for running the [Immich](https://immich.app/) photo management service.
-
-* **`arr-stack`**: A server for running a suite of media management tools (e.g., the *arr stack).
+**k3s-control**: A k3s Kubernetes control plane declared with NixOS.
 
 ## Prerequisites
 
 * A local machine with **Nix** installed and **flakes enabled**.
-
-* [nixos-anywhere](https://github.com/nix-community/nixos-anywhere) for initial installations.
 
 * SSH access to the target machine(s) with a root user.
 
@@ -34,7 +30,10 @@ For the media stack server:
 nix build .#nixosConfigurations.arr-stack.config.system.build.toplevel
 ```
 
-### Future Updates (Ongoing Management)
+### Updating a machine
 
-After the initial installation, all subsequent updates should be handled by a dedicated deployment tool like [Colmena](https://github.com/zhaofengli/colmena). This will allow to automatically manage futur updates on existing NixOS machines.
+This can be done remotely using Colmena. It is only needed to have the host correctly configured with ssh for the target machine. Then, to update a machine, run the following command:
 
+```sh
+colmena apply --on <machine-name>
+```
