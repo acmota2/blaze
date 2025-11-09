@@ -43,6 +43,7 @@
           targetHost = "k3s-control.voldemota.xyz";
           targetUser = "root";
           specialArgs = {
+            address = "k3s-control.voldemota.xyz";
             keyFilePath = "/root/keys.txt";
           };
         };
