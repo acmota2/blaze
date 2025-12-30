@@ -5,9 +5,10 @@
     enable = true;
     extraFlags = [
       "--bind-address 0.0.0.0"
-      "--disable traefik"
-      "--disable servicelb"
+      "--disable-cloud-controller"
       "--disable local-storage"
+      "--disable servicelb"
+      "--disable traefik"
       "--tls-san=${address}"
     ];
   };
