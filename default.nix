@@ -1,10 +1,9 @@
 { pkgs, ... }:
 {
   imports = [
-    { system.stateVersion = "25.05"; }
+    { system.stateVersion = "25.11"; }
     ./boot/default.nix
     ./con/default.nix
-    ./disko/default.nix
     ./localization/default.nix
     ./nfs/default.nix
     ./sops/default.nix

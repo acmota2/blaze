@@ -7,10 +7,10 @@
       inputs.nixpkgs.follows = "unstable";
     };
     disko.url = "github:nix-community/disko";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.05";
+      url = "github:nix-community/nixvim/nixos-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix.url = "github:Mic92/sops-nix";
@@ -31,6 +31,7 @@
       systemConfigs = {
         k3s-control = {
           specificModules = [
+            ./disko/k3s-control.nix
             ./iscsi
             ./k3s/control-plane.nix
             ./machine/k3s-control.nix
