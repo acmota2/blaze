@@ -7,3 +7,6 @@ result-*
 
 # Ignore unencrypted .env
 .env
+
+# Ignore compiled files from utils
+a.out
