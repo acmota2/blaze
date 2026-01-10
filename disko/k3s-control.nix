@@ -31,10 +31,6 @@
                 mountpoint = "/";
               };
             };
-            BIOS = {
-              type = "EF02";
-              size = "2M";
-            };
           };
         };
       };
@@ -43,9 +39,17 @@
         device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1";
         type = "disk";
         content = {
-          type = "filesystem";
-          format = "ext4";
-          mountpoint = "/var/lib/rancher/k3s";
+          type = "gpt";
+          partitions = {
+            data = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/var/lib/rancher/k3s";
+              };
+            };
+          };
         };
       };
     };

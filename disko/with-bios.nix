@@ -30,6 +30,10 @@
                 mountpoint = "/";
               };
             };
+            BIOS = {
+              type = "EF02";
+              size = "2M";
+            };
           };
         };
       };
