@@ -12,17 +12,17 @@ in
   users = {
     groups.deploy = { };
     users = lib.mapAttrs (
-      username:
+      name:
       {
         description ? "Kubernetes user",
         isDeploy ? false,
       }:
       {
-        username = {
+        ${name} = {
           inherit description;
           shell = pkgs.bash;
           isNormalUser = true;
-          group = "${username}";
+          group = "${name}";
           extraGroups = [
             "docker"
             "networkmanager"

@@ -1,4 +1,4 @@
-{ address, ... }:
+{ hostAddress, ... }:
 {
   services.k3s = {
     role = "server";
@@ -9,7 +9,7 @@
       "--disable local-storage"
       "--disable servicelb"
       "--disable traefik"
-      "--tls-san=${address}"
+      "--tls-san=${hostAddress}"
     ];
   };
 

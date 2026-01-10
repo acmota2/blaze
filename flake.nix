@@ -28,8 +28,9 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
+      defaultUsername = "k8s";
       defaultUser = {
-        k8s = { };
+        ${defaultUsername} = { };
       };
 
       systemConfigs = {
@@ -43,16 +44,13 @@
             ./users
           ];
           tags = [ "k8s" ];
-          targetHost = "k3s-control.voldemota.xyz";
-          targetUser = defaultUser.username;
           specialArgs = {
             inherit defaultUser;
-            address = "k3s-control.voldemota.xyz";
+            hostAddress = "k3s-control.voldemota.xyz";
             extraUsers = {
               deploy = {
                 description = "Deploy user";
                 isDeploy = true;
-                username = "deploy";
               };
             };
             keyFilePath = "/home/${defaultUser.username}/keys.txt";
@@ -75,7 +73,6 @@
               hostname: config:
               {
                 inherit hostname;
-                username = config.targetUser;
               }
               // config.specialArgs
             );
@@ -85,11 +82,9 @@
           hostname: config: {
             imports = config.specificModules ++ [ ./. ];
             deployment = {
-              inherit (config)
-                tags
-                targetUser
-                targetHost
-                ;
+              inherit (config) tags;
+              targetUser = if lib.hasAttr "deploy" config.extraUsers then "deploy" else defaultUsername;
+              targetHost = config.specialArgs.hostAddress;
             };
           }
         )
@@ -111,9 +106,9 @@
           modules = config.specificModules ++ [ ./. ];
           specialArgs = {
             inherit hostname;
-            username = config.targetUser;
           }
-          // inputs;
+          // inputs
+          // config.specialArgs;
         }
       );
     };
