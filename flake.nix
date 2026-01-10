@@ -1,5 +1,5 @@
 {
-  description = "My NixOS server configuration";
+  description = "NixOS VM server configuration";
 
   inputs = {
     colmena = {
@@ -28,6 +28,10 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
+      defaultUser = {
+        k8s = { };
+      };
+
       systemConfigs = {
         k3s-control = {
           specificModules = [
@@ -35,17 +39,23 @@
             ./iscsi
             ./k3s/control-plane.nix
             ./machine/k3s-control.nix
-            ./nfs/default.nix
+            ./nfs
+            ./users
           ];
-          specialArgs = {
-            username = "root";
-          };
           tags = [ "k8s" ];
           targetHost = "k3s-control.voldemota.xyz";
-          targetUser = "root";
+          targetUser = defaultUser.username;
           specialArgs = {
+            inherit defaultUser;
             address = "k3s-control.voldemota.xyz";
-            keyFilePath = "/root/keys.txt";
+            extraUsers = [
+              {
+                description = "Deploy user";
+                isDeploy = true;
+                username = "deploy";
+              }
+            ];
+            keyFilePath = "/home/${defaultUser.username}/keys.txt";
           };
         };
       };

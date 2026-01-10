@@ -1,0 +1,57 @@
+{
+  defaultUser,
+  extraUsers ? { },
+  pkgs,
+  ...
+}:
+let
+  lib = pkgs.lib;
+  users = extraUsers // defaultUser;
+in
+{
+  users = {
+    groups.deploy = { };
+    users = lib.mapAttrs (
+      username:
+      {
+        description ? "Kubernetes user",
+        isDeploy ? false,
+      }:
+      {
+        username = {
+          inherit description;
+          shell = pkgs.bash;
+          isNormalUser = true;
+          group = "${username}";
+          extraGroups = [
+            "docker"
+            "networkmanager"
+            "podman"
+            "wheel"
+          ]
+          ++ (if isDeploy then [ "deploy" ] else [ ]);
+          openssh.authorizedKeys.keys = [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB1Bu1KY2x3DGuvOGFhDh00BrXXddgatGno21uEtpOLu acmota2@EnderDragon"
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJhL+Z4YaPU5hDtjjsl9HlKCUPekgGKMI3acWEGfffrp acmota2@Allay"
+          ];
+
+        };
+      }
+    ) users;
+  };
+
+  security.sudo = {
+    enable = true;
+    extraRules = [
+      {
+        groups = [ "deploy" ];
+        commands = [
+          {
+            command = "ALL";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
+  };
+}
