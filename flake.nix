@@ -48,13 +48,13 @@
           specialArgs = {
             inherit defaultUser;
             address = "k3s-control.voldemota.xyz";
-            extraUsers = [
-              {
+            extraUsers = {
+              deploy = {
                 description = "Deploy user";
                 isDeploy = true;
                 username = "deploy";
-              }
-            ];
+              };
+            };
             keyFilePath = "/home/${defaultUser.username}/keys.txt";
           };
         };
@@ -96,8 +96,9 @@
       );
 
       devShells.${system}.default = pkgs.mkShell {
-        packages = [
-          pkgs.sops
+        packages = with pkgs; [
+          just
+          sops
           colmena.packages.${system}.colmena
           nixos-anywhere.packages.${system}.default
         ];
