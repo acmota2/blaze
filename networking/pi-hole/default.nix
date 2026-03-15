@@ -52,7 +52,7 @@ in
   services = {
     pihole-web = {
       enable = true;
-      ports = [ 8080 ];
+      ports = [ "8080o" ];
     };
     pihole-ftl = {
       enable = true;
@@ -91,9 +91,12 @@ in
             "1.0.0.1"
           ];
 
-          webserver.api = {
-            pwhash = config.sops.placeholder.pihole-pwhash;
-            app_pwhash = config.sops.placeholder.pihole-app-pwhash;
+          webserver = {
+            port = "8080o";
+            api = {
+              pwhash = config.sops.placeholder.pihole-pwhash;
+              app_pwhash = config.sops.placeholder.pihole-app-pwhash;
+            };
           };
         };
       };
