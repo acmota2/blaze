@@ -36,11 +36,11 @@
       systemConfigs = {
         k3s-control = {
           specificModules = [
-            ./disko/k3s-control.nix
-            ./iscsi
+            ./disks/disko/k3s-control.nix
+            ./disks/iscsi
+            ./disks/nfs
             ./k3s/control-plane.nix
             ./machine/k3s-control.nix
-            ./nfs
             ./users
           ];
           tags = [ "k8s" ];
@@ -53,7 +53,26 @@
                 isDeploy = true;
               };
             };
-            keyFilePath = "/home/${defaultUser.username}/keys.txt";
+          };
+        };
+
+        net-control = {
+          specificModules = [
+            ./disks/disko
+            ./machine/net-control.nix
+            ./users
+          ];
+          specialArgs = {
+            defaultUser = {
+              net = { };
+            };
+            hostAddress = "net-control.voldemota.xyz";
+            extraUsers = {
+              deploy = {
+                description = "Deploy user";
+                isDeploy = true;
+              };
+            };
           };
         };
       };
@@ -62,6 +81,7 @@
       lib = nixpkgs.lib;
     in
     {
+      # Colmena
       colmenaHive = colmena.lib.makeHive (
         {
           meta = {
@@ -90,15 +110,20 @@
         )
       );
 
+      # Shell
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
-          just
-          sops
+          age
           colmena.packages.${system}.colmena
+          just
           nixos-anywhere.packages.${system}.default
+          openssl
+          ssh-to-age
+          sops
         ];
       };
 
+      # NixOS
       nixosConfigurations = mkSystem (
         hostname: config:
         nixpkgs.lib.nixosSystem {

@@ -1,6 +1,6 @@
-install-k3s-control:
+install-host HOST:
   nixos-anywhere \
-    --flake .#k3s-control \
-    --generate-hardware-config nixos-generate-config machine/k3s-control.nix \
+    --flake .#{{ HOST }} \
+    --generate-hardware-config nixos-generate-config machine/{{ HOST }}.nix \
     --build-on-remote \
-    nixos@k3s-control.voldemota.xyz
+    nixos@{{ HOST }}.hosts.voldemota.xyz

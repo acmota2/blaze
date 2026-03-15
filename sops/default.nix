@@ -1,8 +1,8 @@
-{ keyFilePath, sops-nix, ... }:
+{ sops-nix, ... }:
 {
   imports = [ sops-nix.nixosModules.sops ];
   sops = {
     defaultSopsFormat = "yaml";
-    age.keyFile = "${keyFilePath}";
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   };
 }

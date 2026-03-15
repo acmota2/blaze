@@ -1,7 +1,11 @@
 keys:
   - &Allay age184ftm4s9hy99yl9l9hvy0a2y2qa8c6hkq9velwclsjggsfdh033qjv2606
+  - &EnderDragon age1e2ww68t6ekwk3d6c6k7u6wswnutsuqtht75yseerf7nynsvj6ezq3wtwk7
+  - &k3s-control age1vpzmg00a5wflj42s5j83axnp0edeey3ukcghnzed3vdwl0myudyqnhzssd
 creation_rules:
-  - path_regex: (immich|secrets|arr-stack)\/[^/]+\.(yaml|json|ini|env)$
+  - path_regex: secrets\/[^/]+\.(ya?ml$|env)
     key_groups:
       - age:
           - *Allay
+          - *EnderDragon
+          - *k3s-control

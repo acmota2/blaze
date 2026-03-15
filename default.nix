@@ -5,7 +5,6 @@
     ./boot/default.nix
     ./con/default.nix
     ./localization/default.nix
-    ./nfs/default.nix
     ./sops/default.nix
   ];
 
@@ -15,7 +14,7 @@
     curl
     file
     git
-    htop
+    btop
     unzip
     wget
     zip
