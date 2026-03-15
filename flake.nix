@@ -60,6 +60,8 @@
           specificModules = [
             ./disks/disko
             ./machine/net-control.nix
+            ./networking/nginx
+            ./networking/pi-hole
             ./users
           ];
           specialArgs = {

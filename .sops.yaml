@@ -2,6 +2,7 @@ keys:
   - &Allay age184ftm4s9hy99yl9l9hvy0a2y2qa8c6hkq9velwclsjggsfdh033qjv2606
   - &EnderDragon age1e2ww68t6ekwk3d6c6k7u6wswnutsuqtht75yseerf7nynsvj6ezq3wtwk7
   - &k3s-control age1vpzmg00a5wflj42s5j83axnp0edeey3ukcghnzed3vdwl0myudyqnhzssd
+  - &net-control age18l4722ts6qqlp0v9x3tq8hk9pp8lsw00ghpuek2j6d68f467cccsd4fh68
 creation_rules:
   - path_regex: secrets\/[^/]+\.(ya?ml$|env)
     key_groups:
@@ -9,3 +10,4 @@ creation_rules:
           - *Allay
           - *EnderDragon
           - *k3s-control
+          - *net-control

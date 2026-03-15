@@ -18,24 +18,25 @@ let
   };
 in
 {
-  sops.secrets = {
-    cloudflare-token = {
-      sopsFile = ../../secrets/cloudflare.env;
-      format = "binary";
-    };
+  sops.secrets.cloudflare-token = {
+    sopsFile = ../../secrets/cloudflare.env;
+    format = "dotenv";
+    key = "";
   };
+
+  users.users.nginx.extraGroups = [ "acme" ];
 
   security.acme = {
     acceptTerms = true;
     defaults.email = email;
     certs.${acmeHost} = {
-      domain = acmeHost;
-      enableAcme = true;
-      extraDomainNames = [ "*.${acmeHost}" ];
+      dnsPropagationCheck = true;
       dnsProvider = "cloudflare";
       dnsResolver = "1.1.1.1:53";
-      dnsPropagationCheck = true;
-      environmentFile = config.sops.cloudflare-token.path;
+      domain = acmeHost;
+      environmentFile = config.sops.secrets.cloudflare-token.path;
+      extraDomainNames = [ "*.${acmeHost}" ];
+      group = "nginx";
     };
   };
 

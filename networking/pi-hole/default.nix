@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ lib, ... }:
 let
   hosts = {
     a = {
@@ -30,44 +30,35 @@ let
     };
   };
   inherit (hosts) a cname;
-  topHost = "voldemota.xyz";
+  topHost = "home.voldemota.xyz";
   mkFqdn =
     base: record: if base == "." then "${record}.${topHost}" else "${record}.${base}.${topHost}";
 in
 {
-  sops.secrets = {
-    pihole-pwhash = {
-      sopsFile = ../../secrets/pihole.yaml;
-      format = "yaml";
-      key = "pwhash";
-    };
+  # sops.secrets = {
+  #   pihole-pwhash = {
+  #     sopsFile = ../../secrets/pihole.yaml;
+  #     format = "yaml";
+  #     key = "pwhash";
+  #   };
 
-    pihole-app-pwhash = {
-      sopsFile = ../../secrets/pihole.yaml;
-      format = "yaml";
-      key = "app_pwhash";
-    };
-  };
+  #   pihole-app-pwhash = {
+  #     sopsFile = ../../secrets/pihole.yaml;
+  #     format = "yaml";
+  #     key = "app_pwhash";
+  #   };
+  # };
 
   services = {
     pihole-web = {
       enable = true;
       ports = [ "8080o" ];
     };
+
     pihole-ftl = {
       enable = true;
 
-      lists = [
-        {
-          url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
-          type = "block";
-          enabled = true;
-          description = "Steven Black's HOSTS";
-        }
-      ];
-
       openFirewallDNS = true;
-      openFirewallWebserver = true;
       queryLogDeleter.enable = true;
 
       settings = {
@@ -78,8 +69,11 @@ in
 
         dns = {
           cnameRecords = lib.concatLists (
-            lib.map (zone: lib.map (name: "${zone}.${topHost},${name}.${zone}.${topHost}") zone) cname
+            lib.mapAttrsToList (
+              zone: entries: lib.map (name: "${zone}.${topHost},${name}.${zone}.${topHost}") entries
+            ) cname
           );
+
           hosts = lib.concatLists (
             lib.mapAttrsToList (
               base: records: lib.mapAttrsToList (record: ip: "${ip} ${mkFqdn base record}") records
@@ -90,17 +84,18 @@ in
             "1.1.1.1"
             "1.0.0.1"
           ];
-
-          webserver = {
-            port = "8080o";
-            api = {
-              pwhash = config.sops.placeholder.pihole-pwhash;
-              app_pwhash = config.sops.placeholder.pihole-app-pwhash;
-            };
-          };
         };
+
+        # webserver = {
+        #   port = "8080o";
+        #   api = {
+        #     app_pwhash = config.sops.placeholder.pihole-app-pwhash;
+        #     pwhash = config.sops.placeholder.pihole-pwhash;
+        #   };
+        # };
       };
     };
+
     resolved.extraConfig = ''
       DNSStubListener=no
       MulticastDNS=off
