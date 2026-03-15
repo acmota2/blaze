@@ -66,7 +66,7 @@
             defaultUser = {
               net = { };
             };
-            hostAddress = "net-control.voldemota.xyz";
+            hostAddress = "192.168.1.191";
             extraUsers = {
               deploy = {
                 description = "Deploy user";
@@ -102,9 +102,14 @@
           hostname: config: {
             imports = config.specificModules ++ [ ./. ];
             deployment = {
-              inherit (config) tags;
-              targetUser = if lib.hasAttr "deploy" config.extraUsers then "deploy" else defaultUsername;
+              targetUser = "deploy";
               targetHost = config.specialArgs.hostAddress;
+              buildOnTarget = true;
+              privilegeEscalationCommand = [
+                "sudo"
+                "-H"
+                "--"
+              ];
             };
           }
         )
