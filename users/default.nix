@@ -43,15 +43,7 @@ in
         groups = [ "deploy" ];
         commands = [
           {
-            command = "/run/current-system/sw/bin/nixos-rebuild";
-            options = [ "NOPASSWD" ];
-          }
-          {
-            command = "/run/current-system/sw/bin/systemctl";
-            options = [ "NOPASSWD" ];
-          }
-          {
-            command = "/run/current-system/sw/bin/journalctl";
+            command = "ALL";
             options = [ "NOPASSWD" ];
           }
         ];
