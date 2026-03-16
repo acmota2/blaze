@@ -46,7 +46,7 @@
           tags = [ "k8s" ];
           specialArgs = {
             inherit defaultUser;
-            hostAddress = "k3s-control.voldemota.xyz";
+            hostAddress = "k3s-control.hosts.voldemota.xyz";
             extraUsers = {
               deploy = {
                 description = "Deploy user";
@@ -68,7 +68,7 @@
             defaultUser = {
               net = { };
             };
-            hostAddress = "192.168.1.191";
+            hostAddress = "net-control.hosts.voldemota.xyz";
             extraUsers = {
               deploy = {
                 description = "Deploy user";

@@ -5,14 +5,20 @@ let
   mkDefaultProxy = ip: port: {
     forceSSL = true;
     useACMEHost = acmeHost;
+    locations."/" = {
+      proxyWebsockets = true;
+      proxyPass = "http://${ip}:${port}";
+    };
+  };
+  mkProxmoxProxy = ip: {
+    forceSSL = true;
+    useACMEHost = acmeHost;
 
     locations."/" = {
-      proxyPass = "http://${ip}:${port}";
+      proxyPass = "https://${ip}:8006";
+      proxyWebsockets = true;
       extraConfig = ''
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_ssl_verify off;
       '';
     };
   };
@@ -25,6 +31,14 @@ in
   };
 
   users.users.nginx.extraGroups = [ "acme" ];
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      80
+      443
+    ];
+  };
 
   security.acme = {
     acceptTerms = true;
@@ -51,36 +65,15 @@ in
 
       "pi-hole.${acmeHost}" = {
         forceSSL = true;
-        useACMEHost = "${acmeHost}";
-
+        useACMEHost = acmeHost;
         locations."/" = {
-          return = "302 /admin/";
-        };
-
-        locations."/admin/" = {
-          proxyPass = "http://192.168.1.4:8080/admin/";
-          extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-          '';
-        };
-
-        locations."/api/" = {
-          proxyPass = "http://192.168.1.4:8080/api/";
-          extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-          '';
+          proxyPass = "http://127.0.0.1:8080";
         };
       };
 
-      "pve-apps.${acmeHost}" = mkDefaultProxy "192.168.1.222" "8006";
-      "pve-infra.${acmeHost}" = mkDefaultProxy "192.168.1.223" "8006";
-      "wg.${acmeHost}" = mkDefaultProxy "192.168.1.3" "80";
+      "pve-apps.${acmeHost}" = mkProxmoxProxy "192.168.1.222";
+      "pve-infra.${acmeHost}" = mkProxmoxProxy "192.168.1.223";
+      "wg.${acmeHost}" = mkDefaultProxy "192.168.1.3" "10086";
     };
   };
 }

@@ -4,12 +4,13 @@ let
     a = {
       "hosts" = {
         "k3s-control" = "192.168.1.9";
-        "net-control" = "192.168.1.10";
+        "net-control" = "192.168.1.4";
         "nfs" = "192.168.1.2";
         "wings" = "192.168.1.7";
       };
 
       "." = {
+        "home" = "192.168.1.4";
         "mc" = "192.168.1.7";
       };
 
@@ -30,7 +31,7 @@ let
     };
   };
   inherit (hosts) a cname;
-  topHost = "home.voldemota.xyz";
+  topHost = "voldemota.xyz";
   mkFqdn =
     base: record: if base == "." then "${record}.${topHost}" else "${record}.${base}.${topHost}";
 in
@@ -70,7 +71,7 @@ in
         dns = {
           cnameRecords = lib.concatLists (
             lib.mapAttrsToList (
-              zone: entries: lib.map (name: "${zone}.${topHost},${name}.${zone}.${topHost}") entries
+              zone: entries: lib.map (name: "${name}.${zone}.${topHost},${zone}.${topHost}") entries
             ) cname
           );
 
@@ -100,5 +101,11 @@ in
       DNSStubListener=no
       MulticastDNS=off
     '';
+  };
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 8080 ];
+    allowedUDPPorts = [ 53 ];
   };
 }
