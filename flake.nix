@@ -7,12 +7,9 @@
       inputs.nixpkgs.follows = "unstable";
     };
     disko.url = "github:nix-community/disko";
+    dot-nix-neovim.url = "github:acmota2/dot-nix-neovim";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
-    nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     sops-nix.url = "github:Mic92/sops-nix";
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
@@ -20,6 +17,7 @@
   outputs =
     {
       colmena,
+      dot-nix-neovim,
       nixos-anywhere,
       nixpkgs,
       ...
@@ -27,6 +25,7 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      my-neovim = dot-nix-neovim.packages.${system}.default;
 
       defaultUsername = "k8s";
       defaultUser = {
@@ -45,7 +44,7 @@
           ];
           tags = [ "k8s" ];
           specialArgs = {
-            inherit defaultUser;
+            inherit defaultUser my-neovim;
             hostAddress = "k3s-control.hosts.voldemota.xyz";
             extraUsers = {
               deploy = {
@@ -65,6 +64,7 @@
             ./users
           ];
           specialArgs = {
+            inherit my-neovim;
             defaultUser = {
               net = { };
             };

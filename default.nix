@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ my-neovim, pkgs, ... }:
 {
   imports = [
     { system.stateVersion = "25.11"; }
@@ -9,12 +9,12 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    btop
     coreutils-full
-    neovim
     curl
     file
     git
-    btop
+    my-neovim
     unzip
     wget
     zip
