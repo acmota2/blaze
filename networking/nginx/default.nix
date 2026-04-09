@@ -60,6 +60,7 @@ in
     recommendedProxySettings = true;
 
     virtualHosts = {
+      "infisical.${acmeHost}" = mkDefaultProxy "192.168.1.10" "8080";
       "omv.${acmeHost}" = mkDefaultProxy "192.168.1.2" "80";
       "pelican.${acmeHost}" = mkDefaultProxy "192.168.1.6" "80";
 
