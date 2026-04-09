@@ -7,7 +7,6 @@ let
         "net-control" = "192.168.1.4";
         "nfs" = "192.168.1.2";
         "wings" = "192.168.1.7";
-        "infisical" = "192.168.1.10";
       };
 
       "." = {
@@ -22,6 +21,7 @@ let
 
     cname = {
       "home" = [
+        "infisical"
         "omv"
         "pelican"
         "pi-hole"
