@@ -87,7 +87,7 @@ in
             "1.0.0.1"
           ];
         };
-
+        misc.readOnly = false;
         # webserver = {
         #   port = "8080o";
         #   api = {
