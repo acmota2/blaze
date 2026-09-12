@@ -51,6 +51,7 @@ in
       environmentFile = config.sops.secrets.cloudflare-token.path;
       extraDomainNames = [ "*.${acmeHost}" ];
       group = "nginx";
+      reloadServices = [ "nginx.service" ];
     };
   };
 
