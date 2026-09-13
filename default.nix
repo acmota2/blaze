@@ -1,7 +1,7 @@
 { my-neovim, pkgs, ... }:
 {
   imports = [
-    { system.stateVersion = "25.11"; }
+    { system.stateVersion = "26.05"; }
     ./boot/default.nix
     ./con/default.nix
     ./localization/default.nix
