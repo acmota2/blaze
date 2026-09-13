@@ -21,6 +21,7 @@ let
 
     cname = {
       "home" = [
+        "git"
         "infisical"
         "omv"
         "pelican"

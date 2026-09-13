@@ -42,7 +42,10 @@ in
 
   security.acme = {
     acceptTerms = true;
-    defaults.email = email;
+    defaults = {
+      inherit email;
+      server = "https://acme-v02.api.letsencrypt.org/directory";
+    };
     certs.${acmeHost} = {
       dnsPropagationCheck = true;
       dnsProvider = "cloudflare";
@@ -51,7 +54,7 @@ in
       environmentFile = config.sops.secrets.cloudflare-token.path;
       extraDomainNames = [ "*.${acmeHost}" ];
       group = "nginx";
-      reloadServices = [ "nginx.service" ];
+      reloadServices = [ "nginx" ];
     };
   };
 
@@ -61,6 +64,7 @@ in
     recommendedProxySettings = true;
 
     virtualHosts = {
+      "git.${acmeHost}" = mkDefaultProxy "192.168.1.11" "3000";
       "infisical.${acmeHost}" = mkDefaultProxy "192.168.1.10" "8080";
       "omv.${acmeHost}" = mkDefaultProxy "192.168.1.2" "80";
       "pelican.${acmeHost}" = mkDefaultProxy "192.168.1.6" "80";
