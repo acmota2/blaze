@@ -39,6 +39,7 @@
             ./disks/iscsi
             ./disks/nfs
             ./k3s/control-plane.nix
+            ./k3s
             ./machine/k3s-control.nix
             ./users
           ];
