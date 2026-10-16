@@ -19,9 +19,9 @@ _: {
 
   systemd.services.k3s = {
     after = [
-      "openiscsi.service"
+      "iscsid.service"
       "network-online.target"
     ];
-    requires = [ "openiscsi.service" ];
+    requires = [ "iscsid.service" ];
   };
 }
